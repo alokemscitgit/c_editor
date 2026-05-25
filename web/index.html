@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="erp">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>erp</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TinyMCE Offline</title>
+<script src="tinymce/tinymce.min.js"></script>
+  <style>
+html, body { height:100%; width:100%; margin:0; padding:0; }
+textarea { height:100%; width:100%; }
+ #editor {
+      height: 100%;
+      width: 100%;
+    }
+.tox-statusbar{
+ display: none !important;
+}
+.tox-promotion{
+ display: none !important;
+}
+.tox-powered-by {
+  display: none !important;
+}
+ 
+</style> -->
+</head>
+<body>
+<!-- <textarea id="editor"></textarea> -->
+<!-- <script>
+let isDark = false;
+tinymce.init({
+  selector: '#editor',
+  height: '100%',
+  width: '100%',
+  menubar: 'file edit insert format table help',
+  plugins: 'lists link image code table',
+  toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image | table',
+  skin: isDark ? 'oxide-dark' : 'oxide',
+  base_url: 'tinymce',
+  suffix: '.min',
+  branding: false,
+  statusbar: false,
+  license_key: 'gpl'
+});
+
+function getEditorContent() { return tinymce.get('editor').getContent(); }
+function setEditorContent(html) { tinymce.get('editor').setContent(html); }
+function toggleDark(dark) {
+  isDark = dark;
+  tinymce.get('editor').theme.setSkin(isDark ? 'oxide-dark' : 'oxide');
+}
+
+window.addEventListener('message', (event) => {
+  let data;
+  try { data = JSON.parse(event.data); } catch(e){ return; }
+  if (data.type === 'getContent') {
+    event.source.postMessage(JSON.stringify({type:'getContentResult', content:getEditorContent()}), '*');
+  } else if (data.type === 'setContent') {
+    setEditorContent(data.content);
+  } else if (data.type === 'toggleDark') {
+    toggleDark(data.dark);
+  }
+});
+</script>  
+</body>
+</html> -->

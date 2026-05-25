@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TinyMCE Offline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>
+    // Must use the full package path, no leading slash.
+    window.tinymceScriptURL = 'packages/c_editor/assets/tinymce/tinymce.min.js';
+</script>
+
+<script src="packages/c_editor/assets/tinymce/tinymce.min.js"></script>
+
+ 
+  
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #editor {
+      height: 100%;
+      width: 100%;
+    }
+     .tox-statusbar{
+ display: none !important;
+}
+.tox-promotion{
+ display: none !important;
+}
+.tox-powered-by {
+  display: none !important;
+}
+    /* Removed redundant .tox-statusbar, .tox-promotion, .tox-powered-by CSS overrides */
+  </style>
+</head>
+<body>
+  <textarea id="editor"></textarea>
+
+  <script>
+    // initial theme: light
+    let isDark = false;
+    function initTiny() {
+      
+      tinymce.init({
+        selector: '#editor',
+        height: '100%',
+        width: '100%',
+        menubar: 'edit insert format table help',
+        plugins: 'lists link image code table',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | link image | table',
+        skin: isDark ? 'oxide-dark' : 'oxide',
+        content_css: isDark ? 'dark' : 'default',
+        
+        license_key: 'gpl',
+        branding: false,
+        statusbar: false,
+        resize: false,
+        
+        // tinymceScriptURL now handles the base path resolution
+        
+        setup: function (editor) {
+          editor.on('keyup change', function () {
+            // optional: auto notify host about changes
+            // postMessage to parent with content if desired
+          });
+        }
+      }).then(() => {
+        // Ready
+        postReady();
+      });
+    }
+
+    function postReady() {
+      const msg = { type: 'tinymce-ready' };
+      sendMessageToHost(msg);
+    }
+
+    function getEditorContent() {
+      return tinymce.get('editor') ? tinymce.get('editor').getContent() : '';
+    }
+
+    function setEditorContent(html) {
+      if (tinymce.get('editor')) {
+        tinymce.get('editor').setContent(html || '');
+      }
+    }
+
+    function toggleDark(mode) {
+      isDark = !!mode;
+      // destroy and re-init to switch skins cleanly
+      if (tinymce.get('editor')) {
+        tinymce.get('editor').remove();
+      }
+      initTiny();
+    }
+
+    function sendMessageToHost(payload) {
+      const message = JSON.stringify(payload);
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(message, '*');
+      }
+      try { console.log('TinyMCE->host:', message); } catch (e) {}
+    }
+
+    window.addEventListener('message', function (evt) {
+      let d = evt.data;
+      try { d = JSON.parse(d); } catch (e) { /* not JSON */ }
+      if (!d || !d.type) return;
+      handleHostMessage(d);
+    }, false);
+
+    function handleHostMessage(d) {
+      if (d.type === 'getContent') {
+        const html = getEditorContent();
+        sendMessageToHost({ type: 'getContentResult', content: html });
+      } else if (d.type === 'setContent') {
+        setEditorContent(d.content || '');
+        sendMessageToHost({ type: 'setContentResult', ok: true });
+      } else if (d.type === 'toggleDark') {
+        toggleDark(Boolean(d.dark));
+        sendMessageToHost({ type: 'toggleDarkResult', ok: true, dark: isDark });
+      } else if (d.type === 'readyCheck') {
+        //sendMessageToHost({ type: 'tinymce-ready' });
+      }
+    }
+
+    // Initialize editor
+    initTiny();
+  </script>
+</body>
+</html>
