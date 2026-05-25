@@ -38,7 +38,7 @@ class _TinyMCEEditorState extends State<TinyMCEEditor> {
 
   Future<void> _createAndRegisterIframe() async {
     final htmlContent = await rootBundle.loadString(
-      'packages/c_editor/assets/tiny_editor.html', // Ensure this path is correct
+      'packages/c_editor/assets/tinymce/tiny_editor.html', // Ensure this path is correct
     );
 
     // Call the web-specific function to create and register the iframe
